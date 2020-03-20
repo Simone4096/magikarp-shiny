@@ -1,10 +1,8 @@
 import win32gui
 import win32ui
 import win32con
-from time import sleep
-import ctypes
+import win32com.client
 import time
-
 
 def screenshot(hwnd = None):
     
@@ -23,12 +21,15 @@ def screenshot(hwnd = None):
     
     newDC.SelectObject(myBitMap)
     
+    shell = win32com.client.Dispatch("WScript.Shell")
+    shell.SendKeys('#')
     
     win32gui.SetForegroundWindow(hwnd[0])
-    sleep(.2)
+    time.sleep(.2)
     newDC.BitBlt((0,0),(w, h) , myDC, (0,0), win32con.SRCCOPY)
     myBitMap.Paint(newDC)
-    myBitMap.SaveBitmapFile(newDC,'C:/Users/Simone-/Documents/Giochi/GB/screen.bmp')
+    myBitMap.SaveBitmapFile(newDC,'./screen.bmp')
+
 
 def get_window(title_text, exact = False):
     
@@ -43,8 +44,8 @@ def get_window(title_text, exact = False):
         return [hwnd for hwnd, title in windows if title_text == title]
     else:
         return [hwnd for hwnd, title in windows if title_text in title]
-    
 
+import ctypes
 PUL = ctypes.POINTER(ctypes.c_ulong)
 
 class KeyBdInput(ctypes.Structure):
